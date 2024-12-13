@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, app
+from werkzeug.utils import quote
 app = Flask(__name__)
 @app.route('/')
 def index():
