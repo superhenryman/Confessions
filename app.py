@@ -17,7 +17,7 @@ def gibmeyourmoney():
             app.logger.debug(f"Confession saved: {confession}")
             return render_template('worked.html'), 200
         except Exception as e:
-            app.logger.error(f"Error writing to file: {e}")
+            return render_template('error.html')
             return f"Error: {str(e)}", 500
     return "It didn't work :(", 400
 
