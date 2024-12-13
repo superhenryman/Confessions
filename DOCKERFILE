@@ -1,0 +1,20 @@
+# Use a specific base image
+FROM ghcr.io/railwayapp/nixpacks:ubuntu-1731369831
+
+# Set environment variables
+ENV NIXPACKS_PATH=/opt/venv/bin:$NIXPACKS_PATH
+
+# Set the working directory in the container
+WORKDIR /app/
+
+# Copy application files into the container
+COPY . /app/.
+
+# Install dependencies and create virtual environment
+RUN python -m venv /opt/venv && /opt/venv/bin/pip install --upgrade pip && /opt/venv/bin/pip install -r requirements.txt
+
+# Expose the necessary port
+EXPOSE 8080
+
+# Command to start the application using Gunicorn
+CMD ["/opt/venv/bin/gunicorn", "app:app", "--bind", "0.0.0.0:8080"]
