@@ -13,5 +13,3 @@ def gibmeyourmoney():
             file.write(confession  + '\n')
         return worked(), 200
     return "It didn't work :(", 400
-if __name__ == '__main__':
-    app.run(debug=True)
