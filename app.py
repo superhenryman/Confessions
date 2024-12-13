@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, app
-from werkzeug.utils import quote
+from werkzeug.utils import url_quote
 app = Flask(__name__)
 @app.route('/')
 def index():
