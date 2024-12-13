@@ -4,6 +4,8 @@ import psycopg2 as psy
 import os
 app = Flask(__name__)
 database = os.getenv('DATABASE_URL')
+if database == None:
+        raise Exception("Database URL is not set up properly, please fix.") 
 conn = psy.connect(database)
 cur = conn.cursor()
 cur.execute("""
@@ -25,7 +27,7 @@ def gibmeyourmoney():
     confession = request.form.get('confession')
     if confession:
         try:
-            cur.execute("INSERT INTO confessions (confession) VALUE (%s)", (confession,))
+            cur.execute("INSERT INTO confessions (confession) VALUES (%s)", (confession,))
             conn.commit()
             app.logger.debug(f"Confession saved: {confession}")
             return render_template('worked.html'), 200
