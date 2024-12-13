@@ -4,6 +4,7 @@ import psycopg2 as psy
 import os
 app = Flask(__name__)
 database = os.getenv('DATABASE_URL')
+print(database)
 if database == None:
         raise Exception("Database URL is not set up properly, please fix.") 
 conn = psy.connect(database)
