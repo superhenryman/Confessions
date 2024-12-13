@@ -4,7 +4,7 @@ import psycopg2 as psy
 import os
 app = Flask(__name__)
 database = os.getenv('DATABASE_URL')
-conn == psy.connect(database)
+conn = psy.connect(database)
 cur = conn.cursor()
 cur.execute("""
         CREATE TABLE IF NOT EXISTS confessions (
@@ -25,12 +25,11 @@ def gibmeyourmoney():
     confession = request.form.get('confession')
     if confession:
         try:
-            cur.execute("INSERT INTO confessions (confessions) VALUE (%s)", (confession,))
+            cur.execute("INSERT INTO confessions (confession) VALUE (%s)", (confession,))
             conn.commit()
             app.logger.debug(f"Confession saved: {confession}")
             return render_template('worked.html'), 200
         except Exception as e:
             return render_template('error.html')
-            return f"Error: {str(e)}", 500
     return "It didn't work :(", 400
 
