@@ -1,8 +1,8 @@
-# Use a specific base image
-FROM ghcr.io/railwayapp/nixpacks:ubuntu-1731369831
+# Use a specific base image for Python
+FROM python:3.11-slim
 
 # Set environment variables
-ENV NIXPACKS_PATH=/opt/venv/bin:$NIXPACKS_PATH
+ENV PATH="/opt/venv/bin:$PATH"
 
 # Set the working directory in the container
 WORKDIR /app/
@@ -11,7 +11,9 @@ WORKDIR /app/
 COPY . /app/.
 
 # Install dependencies and create virtual environment
-RUN python -m venv /opt/venv && /opt/venv/bin/pip install --upgrade pip && /opt/venv/bin/pip install -r requirements.txt
+RUN python -m venv /opt/venv && \
+    /opt/venv/bin/pip install --upgrade pip && \
+    /opt/venv/bin/pip install -r requirements.txt
 
 # Expose the necessary port
 EXPOSE 8080
