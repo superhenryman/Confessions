@@ -3,7 +3,7 @@ import logging
 import psycopg2 as psy
 import os
 app = Flask(__name__)
-database = os.getenv('postgresql://postgres:ObdGQvQZEHOaxnKQtyXLbUZCoXTEFDmv@postgres.railway.internal:5432/railway')
+database = os.getenv('DATABASE_URL')
 conn == psy.connect(database)
 cur = conn.cursor()
 cur.execute("""
