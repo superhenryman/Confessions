@@ -1,6 +1,19 @@
 from flask import Flask, render_template, request, app
 import logging
+import psycopg2 as psy
+import os
 app = Flask(__name__)
+database = os.getenv('postgresql://postgres:ObdGQvQZEHOaxnKQtyXLbUZCoXTEFDmv@postgres.railway.internal:5432/railway')
+conn == psy.connect(database)
+cur = conn.cursor()
+cur.execute("""
+        CREATE TABLE IF NOT EXISTS confessions (
+            id SERIAL PRIMARY KEY,
+            confession TEXT NOT NULL
+        );
+    """)
+conn.commit()
+
 logging.basicConfig(level=logging.DEBUG)
 @app.route('/')
 def index():
@@ -12,8 +25,8 @@ def gibmeyourmoney():
     confession = request.form.get('confession')
     if confession:
         try:
-            with open('confession.txt', 'a') as file:
-                file.write(confession + '\n')
+            cur.execute("INSERT INTO confessions (confessions) VALUE (%s)", (confession,))
+            conn.commit()
             app.logger.debug(f"Confession saved: {confession}")
             return render_template('worked.html'), 200
         except Exception as e:
