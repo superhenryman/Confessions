@@ -1,5 +1,7 @@
 from flask import Flask, render_template, request, app
+import logging
 app = Flask(__name__)
+logging.basicConfig(level=logging.DEBUG)
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -9,7 +11,13 @@ def worked():
 def gibmeyourmoney():
     confession = request.form.get('confession')
     if confession:
-        with open('confession.txt', 'a') as file:
-            file.write(confession  + '\n')
-        return worked(), 200
+        try:
+            with open('confession.txt', 'a') as file:
+                file.write(confession + '\n')
+            app.logger.debug(f"Confession saved: {confession}")
+            return render_template('worked.html'), 200
+        except Exception as e:
+            app.logger.error(f"Error writing to file: {e}")
+            return f"Error: {str(e)}", 500
     return "It didn't work :(", 400
+
