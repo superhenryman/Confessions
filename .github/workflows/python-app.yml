@@ -3,10 +3,10 @@ name: Deploy to Railway
 on:
   push:
     branches:
-      - main  # This deploys when there is a push to the main branch
+      - main  # Deploy when there is a push to the main branch
   pull_request:
     branches:
-      - main  # This will trigger deployment when there's a PR to the main branch
+      - main  # Trigger deployment when there's a PR to the main branch
 
 jobs:
   deploy:
@@ -14,16 +14,26 @@ jobs:
 
     steps:
       - name: Checkout the repository
-        uses: actions/checkout@v3  # This checks out your code from GitHub
+        uses: actions/checkout@v3  # Checks out the code from GitHub
 
       - name: Set up Python
         uses: actions/setup-python@v4  # Set up Python for the workflow
         with:
-          python-version: '3.x'  # Specify the Python version you want (can be 3.10 or 3.13)
+          python-version: '3.11'  # Specify the Python version (e.g., 3.11)
+
+      - name: Cache Python dependencies
+        uses: actions/cache@v3  # Caches dependencies to speed up future runs
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-python-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-python-
 
       - name: Install dependencies
         run: |
-          python -m pip install --upgrade pip
+          python -m venv /opt/venv  # Create a virtual environment
+          . /opt/venv/bin/activate  # Activate the virtual environment
+          pip install --upgrade pip
           pip install -r requirements.txt  # Install your app's dependencies
 
       - name: Railway CLI login
@@ -32,4 +42,6 @@ jobs:
           token: ${{ secrets.RAILWAY_API_TOKEN }}  # This token should be stored in GitHub secrets
 
       - name: Deploy to Railway
-        run: railway up --project ${{ secrets.RAILWAY_PROJECT_ID }}  # Deploy to Railway using the CLI
+        run: |
+          . /opt/venv/bin/activate  # Activate the virtual environment
+          railway up --project ${{ secrets.RAILWAY_PROJECT_ID }}  # Deploy to Railway using the CLI
