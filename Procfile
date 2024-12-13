@@ -1,0 +1,1 @@
+vweb: gunicorn app:app
