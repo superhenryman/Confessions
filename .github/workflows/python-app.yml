@@ -1,39 +1,35 @@
+name: Deploy to Railway
+
+on:
+  push:
+    branches:
+      - main  # This deploys when there is a push to the main branch
+  pull_request:
+    branches:
+      - main  # This will trigger deployment when there's a PR to the main branch
+
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  deploy:
+    runs-on: ubuntu-latest  # The job will run on an Ubuntu machine
 
     steps:
-    - uses: actions/checkout@v4
-    
-    # Set up Python 3.13
-    - name: Set up Python 3.13
-      uses: actions/setup-python@v3
-      with:
-        python-version: "3.13"
-    
-    # Cache Python dependencies to speed up workflow
-    - name: Cache Python dependencies
-      uses: actions/cache@v3
-      with:
-        path: ~/.cache/pip
-        key: ${{ runner.os }}-pip-cache-${{ hashFiles('**/requirements.txt') }}
-        restore-keys: |
-          ${{ runner.os }}-pip-cache-
-    
-    # Install dependencies
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install flake8 pytest pytest-cov flask
-        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-    
-    # Lint with flake8
-    - name: Lint with flake8
-      run: |
-        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
-    
-    # Test with pytest (Flask tests)
-    - name: Test with pytest
-      run: |
-        pytest --maxfail=1 --disable-warnings --cov=your_flask_app  # Replace 'your_flask_app' with the actual Flask module name
+      - name: Checkout the repository
+        uses: actions/checkout@v3  # This checks out your code from GitHub
+
+      - name: Set up Python
+        uses: actions/setup-python@v4  # Set up Python for the workflow
+        with:
+          python-version: '3.x'  # Specify the Python version you want (can be 3.10 or 3.13)
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt  # Install your app's dependencies
+
+      - name: Railway CLI login
+        uses: railwayapp/railway-action@v1  # Log into Railway using GitHub Actions
+        with:
+          token: ${{ secrets.RAILWAY_API_TOKEN }}  # This token should be stored in GitHub secrets
+
+      - name: Deploy to Railway
+        run: railway up --project ${{ secrets.RAILWAY_PROJECT_ID }}  # Deploy to Railway using the CLI
