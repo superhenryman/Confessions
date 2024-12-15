@@ -13,14 +13,18 @@ if not database_url:
     raise Exception("Database URL is not set up properly, please fix.")
 
 # Function to create a new database connection
-def get_db_connection():
-    try:
-        conn = psycopg2.connect(database_url)
-        return conn
-    except Exception as e:
-        app.logger.error(f"Error connecting to database: {e}")
-        raise
 
+def get_db_connection():
+    database_url = os.getenv('DATABASE_URL')
+    retry_count = 5
+    for attempt in range(retry_count):
+        try:
+            conn = psycopg2.connect(database_url)
+            return conn
+        except Exception as e:
+            print(f"Attempt {attempt + 1} failed: {e}")
+            time.sleep(2 ** attempt)  # Exponential backoff for retry
+    raise Exception("Failed to connect to the database after multiple attempts.")
 # Initialize database table
 def init_db():
     conn = get_db_connection()
