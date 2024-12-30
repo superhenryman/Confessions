@@ -5,14 +5,12 @@ from psycopg2 import sql
 import logging
 app = Flask(__name__)
 
-# Get database URL from environment variables
 database_url = os.getenv('DATABASE_URL')
 
 if not database_url:
     app.logger.error("Database URL is not set up properly.")
     raise Exception("Database URL is not set up properly, please fix.")
 
-# Function to create a new database connection
 
 def get_db_connection():
     database_url = os.getenv('DATABASE_URL')
@@ -23,9 +21,8 @@ def get_db_connection():
             return conn
         except Exception as e:
             print(f"Attempt {attempt + 1} failed: {e}")
-            time.sleep(2 ** attempt)  # Exponential backoff for retry
+            time.sleep(2 ** attempt)
     raise Exception("Failed to connect to the database after multiple attempts.")
-# Initialize database table
 def init_db():
     conn = get_db_connection()
     cur = conn.cursor()
@@ -39,7 +36,6 @@ def init_db():
     cur.close()
     conn.close()
 
-# Initialize the database
 init_db()
 
 if not app.debug:
@@ -53,7 +49,6 @@ def gibmeyourmoney():
     confession = request.form.get('confession')
     if confession:
         try:
-            # Insert confession into the database
             conn = get_db_connection()
             cur = conn.cursor()
             cur.execute("INSERT INTO confessions (confession) VALUES (%s)", (confession,))
@@ -61,7 +56,6 @@ def gibmeyourmoney():
             cur.close()
             conn.close()
 
-            app.logger.debug(f"Confession saved: {confession}")
             return render_template('worked.html'), 200
         except Exception as e:
             app.logger.error(f"Error inserting confession: {e}")
