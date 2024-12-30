@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, logging
 import psycopg2
 import os
 from psycopg2 import sql
-
+import logging
 app = Flask(__name__)
 
 # Get database URL from environment variables
@@ -42,8 +42,8 @@ def init_db():
 # Initialize the database
 init_db()
 
-logging.basicConfig(level=logging.DEBUG)
-
+if not app.debug:
+    app.logger.setLevel(logging.DEBUG)
 @app.route('/')
 def index():
     return render_template('index.html')
