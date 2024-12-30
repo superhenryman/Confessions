@@ -3,9 +3,6 @@ body {
     text-align: center;
     font-family:Arial, Helvetica, sans-serif;
 }
-.header, .confessions, footer {
-    max-width: 600px;
-}
 textarea {
     width: 50%;
     height:100px;
