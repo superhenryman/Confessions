@@ -5,25 +5,37 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>School Confessions Page</title>
     <noscript>You disabled Javascript, even though it isn't useful lol</noscript>
-    <link rel="stylesheet" href="/static/stylesheet.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="icon" href="/static/favicon.ico">
 </head>
 <body>
-    <div class="header">
-        <header>
-            <h1>School Confessions Page</h1>
-            <h3>This page will be updated every week to include the latest confessions!</h3>
-        </header>
+
+    <div class="container mt-5">
+        <div class="header text-center">
+            <header>
+                <h1 class="display-3">School Confessions Page</h1>
+                <h3 class="text-muted">This page will be updated every week to include the latest confessions!</h3>
+            </header>
+        </div>
+
+        <div class="confessions mt-4">
+            <form method="post" id="confessionstuff" action="/submit">
+                <div class="form-group">
+                    <label for="confession">Please input your confession below:</label>
+                    <textarea form="confessionstuff" id="confession" name="confession" class="form-control" placeholder="Insert your confessions here:" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary btn-lg">Submit Confession</button>
+            </form>
+        </div>
     </div>
-    <div class="confessions">
-        <form method="post" id="confessionstuff" action="/submit">
-        <label for="confession">Please input your confession below:</label><br>
-        <textarea form ="confessionstuff" id="confession" type="text" placeholder="Insert your confessions here:" name="confession" required></textarea><br>
-        <input type="submit" id="na">
-        </form>
-    </div>
-    <footer>
-        <p>Made with 💖 by Kareem Alhaj</p>
+
+    <footer class="mt-5 text-center">
+        <p>Made with 💖 by superhenryman</p>
     </footer>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
 </body>
 </html>
