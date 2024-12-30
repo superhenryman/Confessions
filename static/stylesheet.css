@@ -4,7 +4,7 @@ body {
 }
 .header, .confessions, footer {
     margin:0;
-    max-width: 800px;
+    max-width: 600px;
     padding:20px;
 }
 textarea {
