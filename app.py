@@ -69,14 +69,16 @@ def gibmeyourmoney():
                 cur = conn.cursor()
                 cur.execute("INSERT INTO confessions (confession) VALUES (%s)", (confession,))
                 conn.commit()
-                cur.close()
-                conn.close()
                 return render_template('worked.html'), 200
             except Exception as e:
                 app.logger.error(f"Error inserting confession: {e}")
                 return render_template('error.html', errorcode = "Database didn't work.")
+            finally:
+                cur.close()
+                conn.close()
         return "It didn't work :(", 400
-
+    else:
+        return render_template("error.html", errorcode = "Captcha verification bad.")
 if __name__ == '__main__':
     app.run(debug=True)
 #ana jo3an kteer
