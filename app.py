@@ -6,9 +6,8 @@ import logging
 import requests
 import time
 app = Flask(__name__)
-SECRET_KEY = '6LeL18oqAAAAAAbzy3FKxobu2HOFB0Jgo_68xTJc'
+SECRET_KEY = os.getenv('SECRET_KEY')
 
-# Verify reCAPTCHA
 def verify_recaptcha(response_token):
     url = 'https://www.google.com/recaptcha/api/siteverify'
     data = {
